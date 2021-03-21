@@ -34,13 +34,40 @@ const createSearchBar = () => {
 
 }
 
+// handleGalleryCreation
+
+const handleGalleryCreation = (list) => {
+
+    createGallery(list);
+    addGalleryListeners();
+
+}
+
+// handleModalCreation
+
+const handleModalCreation = (card) => {
+
+    if (getModalContainer())
+        getModalContainer().remove();
+
+    const employee = getEmployee(card);
+    const details = getDetails(employee);
+    
+    createModal(details);
+    addModalListeners(card);
+
+}
+
 // createGallery
 
-const createGallery = (results) => {
+const createGallery = (list) => {
 
-    results.forEach((employee) => {
+    gallery.innerHTML = '';
 
-        employees.push(employee);
+    list.forEach((employee) => {
+
+        if (employees.length < 12)
+            employees.push(employee);
 
         const html = `<div class="card">
                         <div class="card-img-container">
@@ -52,7 +79,8 @@ const createGallery = (results) => {
                             <p class="card-text cap">${ employee.location.city }, ${ employee.location.state }</p>
                         </div>`;
         
-        gallery.insertAdjacentHTML('beforeend', html);
+        // gallery.insertAdjacentHTML('beforeend', html);
+        gallery.innerHTML += html;
 
     });
     
@@ -89,18 +117,27 @@ const createModal = ({ image, name, email, city, phone, street, state, postCode,
 // filterEmployees
 
 const filterEmployees = (value) => {
-    
-    getCardNames().forEach((cardName) => {
 
-        const card = cardName.parentNode.parentNode;
+    const filteredEmployees = employees.filter((employee) => {
 
-        if (!(cardName.textContent.includes(value)))
-            card.style.display = 'none';
-        
-        else
-            card.style.display = '';    
+        const employeeName = employee.name.first + ' ' + employee.name.last;
+        return employeeName.toLowerCase().includes(value.toLowerCase());
 
     });
+
+    handleGalleryCreation(filteredEmployees);
+    
+    // getCardNames().forEach((cardName) => {
+
+    //     const card = cardName.parentNode.parentNode;
+
+    //     if (!(cardName.textContent.includes(value)))
+    //         card.style.display = 'none';
+        
+    //     else
+    //         card.style.display = '';    
+
+    // });
 
 }
 
@@ -153,67 +190,49 @@ const getDetails = (employee) => {
 
 // Event Listeners
 
-const addListeners = () => {
+const addButtonListener = () => getSearchButton().addEventListener('click', () => filterEmployees(getSearchInput().value));
+const addInputListener = () => getSearchInput().addEventListener('input', (e) => filterEmployees(e.target.value));
+const addGalleryListeners = () => getCards().forEach((card) => card.addEventListener('click', () => handleModalCreation(card)));
 
-    // handleModalCreation
+// addModalListeners
 
-    const handleModalCreation = (card) => {
+const addModalListeners = (card) => {
 
-        if (getModalContainer())
-            getModalContainer().remove();
+    // Add An Event Listener To The Closing Button & To The Modal Container
 
-        const employee = getEmployee(card);
-        const details = getDetails(employee);
-        
-        createModal(details);
-        addModalListeners(card);
+    getClosingButton().addEventListener('click', () => getModalContainer().remove());
+    getModalContainer().addEventListener('click', (e) => {
 
-    }
+        if (e.target.className === 'modal-container')
+            e.target.remove();
 
-    const addButtonListener = () => getSearchButton().addEventListener('click', () => filterEmployees(getSearchInput().value));
-    const addInputListener = () => getSearchInput().addEventListener('input', (e) => filterEmployees(e.target.value));
+    });
 
-    // addGalleryListeners
+    // Add An Event Listener To The Previous Button & To The Next Button
 
-    const addGalleryListeners = () => getCards().forEach((card) => card.addEventListener('click', () => handleModalCreation(card)));
+    getPreviousButton().addEventListener('click', () => {
 
-    // addModalListeners
+        const previousCard = card.previousElementSibling;
 
-    const addModalListeners = (card) => {
+        if (previousCard)
+            handleModalCreation(previousCard);
 
-        // Add An Event Listener To The Closing Button & To The Modal Container
+    });
 
-        getClosingButton().addEventListener('click', () => getModalContainer().remove());
-        getModalContainer().addEventListener('click', (e) => {
+    getNextButton().addEventListener('click', () => {
 
-            if (e.target.className === 'modal-container')
-                e.target.remove();
+        const nextCard = card.nextElementSibling;
 
-        });
+        if (nextCard)
+            handleModalCreation(nextCard);
 
-        // Add An Event Listener To The Previous Button & To The Next Button
-
-        getPreviousButton().addEventListener('click', () => {
-
-            const previousCard = card.previousElementSibling;
-
-            if (previousCard)
-                handleModalCreation(previousCard);
-
-        });
-
-        getNextButton().addEventListener('click', () => {
-
-            const nextCard = card.nextElementSibling;
-
-            if (nextCard)
-                handleModalCreation(nextCard);
-
-        });
-       
-    }
+    });
     
-    // Actually Add The Event Listeners
+}
+
+// A Function To Actually Add The Event Listeners
+
+const addListeners = () => {
 
     addButtonListener();
     addInputListener();
