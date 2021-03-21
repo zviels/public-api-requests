@@ -16,6 +16,8 @@ const getCards = () => document.querySelectorAll('.card');
 const getCardNames = () => document.querySelectorAll('.card-name');
 const getModalContainer = () => document.querySelector('.modal-container');
 const getClosingButton = () => document.querySelector('#modal-close-btn');
+const getPreviousButton = () => document.querySelector('#modal-prev');
+const getNextButton = () => document.querySelector('#modal-next');
 
 // Auxiliary Functions
 
@@ -74,6 +76,10 @@ const createModal = ({ image, name, email, city, phone, street, state, postCode,
                             <p class="modal-text">Birthday: ${ birthday }</p>
                         </div>
                     </div>
+                    <div class="modal-btn-container">
+                        <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                        <button type="button" id="modal-next" class="modal-next btn">Next</button>
+                    </div>    
                 </div>`;
 
     body.insertAdjacentHTML('beforeend', html);
@@ -147,39 +153,66 @@ const getDetails = (employee) => {
 
 // Event Listeners
 
-const addListeners = async () => {
+const addListeners = () => {
+
+    // handleModalCreation
+
+    const handleModalCreation = (card) => {
+
+        if (getModalContainer())
+            getModalContainer().remove();
+
+        const employee = getEmployee(card);
+        const details = getDetails(employee);
+        
+        createModal(details);
+        addModalListeners(card);
+
+    }
 
     const addButtonListener = () => getSearchButton().addEventListener('click', () => filterEmployees(getSearchInput().value));
     const addInputListener = () => getSearchInput().addEventListener('input', (e) => filterEmployees(e.target.value));
 
     // addGalleryListeners
 
-    const addGalleryListeners = () => getCards().forEach((card) => card.addEventListener('click', () => {
+    const addGalleryListeners = () => getCards().forEach((card) => card.addEventListener('click', () => handleModalCreation(card)));
 
-        const employee = getEmployee(card);
-        const details = getDetails(employee);
-        createModal(details);
+    // addModalListeners
 
-        // Add Modal Listeners Only After The Creation Of The Modal
+    const addModalListeners = (card) => {
 
-        const addModalListeners = () => {
+        // Add An Event Listener To The Closing Button & To The Modal Container
 
-            // Add An Event Listener To The Closing Button & To The Modal Container
+        getClosingButton().addEventListener('click', () => getModalContainer().remove());
+        getModalContainer().addEventListener('click', (e) => {
 
-            getClosingButton().addEventListener('click', () => getModalContainer().remove());
-            getModalContainer().addEventListener('click', (e) => {
+            if (e.target.className === 'modal-container')
+                e.target.remove();
 
-                if (e.target.className === 'modal-container')
-                    e.target.remove();
+        });
 
-            });
-           
-        }
+        // Add An Event Listener To The Previous Button & To The Next Button
 
-        addModalListeners();
+        getPreviousButton().addEventListener('click', () => {
 
-    }));
+            const previousCard = card.previousElementSibling;
 
+            if (previousCard)
+                handleModalCreation(previousCard);
+
+        });
+
+        getNextButton().addEventListener('click', () => {
+
+            const nextCard = card.nextElementSibling;
+
+            if (nextCard)
+                handleModalCreation(nextCard);
+
+        });
+       
+    }
+    
     // Actually Add The Event Listeners
 
     addButtonListener();
