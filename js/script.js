@@ -242,7 +242,8 @@ const run = () => {
     fetch('https://randomuser.me/api/?results=12&nat=us')
         .then((res) => res.json())
         .then((users) => createGallery(users.results))
-        .then(() => addListeners());
+        .then(() => addListeners())
+        .catch((e) => console.log('An Error Occured: ' + e));
 
 }
 
