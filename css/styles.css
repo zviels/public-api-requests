@@ -14,7 +14,7 @@ html, body {
 }
 
 body {
-    font-family: "Nunito", sans-serif;
+    font-family: 'Open Sans', sans-serif;
     text-align: center;
     background: rgba(235, 235, 235, 0.9);
 }
@@ -29,9 +29,17 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
-    color: rgba(50, 50, 50, 0.9);
-    margin-top: 35px;
+    font-family: 'Ranchers', cursive;
+    font-size: 2em;
+    letter-spacing: 1.5px;
+    color: rgba(45, 45, 45, 0.85);
+    margin-top: 21px;
+    transition: 0.5s;
+}
+
+header h1:hover {
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, .2);
+    transform: translate(-4px, -4px);
 }
 
 .search-input {
@@ -39,12 +47,13 @@ header h1 {
     border: 1px solid rgba(200, 200, 200, 0.9);
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
-    transition: .4s ease-out;
+    transition: .5s ease-out;
     outline: none;
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, .2);
+    transform: translate(-4px, -4px);
 }
 
 .search-submit {
@@ -59,7 +68,8 @@ header h1 {
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, .2);
+    transform: translate(4px, -4px);
 }
 
 
@@ -141,8 +151,8 @@ header h1 {
     margin: 10px auto auto;
     padding-bottom: 15px;
     background: rgba(255, 255, 255, 1);
-    border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    /* border-radius: 0.25em;
+    border: 1px solid rgba(100, 100, 100, 0.3); */
     transition: .4s ease-out;
 }
 
@@ -187,12 +197,11 @@ header h1 {
     width: 95%;
     max-width: 420px;
     padding: 10px 15px 15px;;
-    margin: 10px auto auto;
+    margin: -1px auto auto;
     background: rgba(255, 255, 255, 1);
-    border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    /* border-radius: 0.25em;
+    border: 1px solid rgba(100, 100, 100, 0.3); */
 }
-
 
 .modal-btn-container .btn {
     display: inline-block;
@@ -249,7 +258,10 @@ header h1 {
 
     .card:hover {
         background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        /* border: 1px solid rgba(50, 50, 50, 0.9); */
+        box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, .2);
+        transform: translate(-4px, -4px);
+        transition: 0.5s;
     }
 
     .card:hover .card-text {

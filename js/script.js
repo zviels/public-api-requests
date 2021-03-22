@@ -56,6 +56,12 @@ const handleModalCreation = (card) => {
     createModal(details);
     addModalListeners(card);
 
+    if (card === gallery.firstElementChild)
+        getPreviousButton().remove();
+    
+    if (card === gallery.lastElementChild)
+        getNextButton().remove();    
+
 }
 
 // createGallery
@@ -79,7 +85,6 @@ const createGallery = (list) => {
                             <p class="card-text cap">${ employee.location.city }, ${ employee.location.state }</p>
                         </div>`;
         
-        // gallery.insertAdjacentHTML('beforeend', html);
         gallery.innerHTML += html;
 
     });
@@ -92,7 +97,7 @@ const createModal = ({ image, name, email, city, phone, street, state, postCode,
 
     const html = `<div class="modal-container">
                     <div class="modal">
-                        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+                        <button type="button" id="modal-close-btn" class="modal-close-btn btn"><strong>X</strong></button>
                         <div class="modal-info-container">
                             <img class="modal-img" src=${ image } alt="Profile Picture">
                             <h3 id="name" class="modal-name cap">${ name }</h3>
@@ -126,18 +131,6 @@ const filterEmployees = (value) => {
     });
 
     handleGalleryCreation(filteredEmployees);
-    
-    // getCardNames().forEach((cardName) => {
-
-    //     const card = cardName.parentNode.parentNode;
-
-    //     if (!(cardName.textContent.includes(value)))
-    //         card.style.display = 'none';
-        
-    //     else
-    //         card.style.display = '';    
-
-    // });
 
 }
 
@@ -214,7 +207,7 @@ const addModalListeners = (card) => {
 
         const previousCard = card.previousElementSibling;
 
-        if (previousCard)
+        if (previousCard) 
             handleModalCreation(previousCard);
 
     });
@@ -240,18 +233,14 @@ const addListeners = () => {
 
 }
 
-// Fetch Functions
-
-const fetchUsers = (url) => fetch(url)
-                    .then((res) => res.json());
-
 // Activation Functions
 
 const run = () => {
 
     createSearchBar();
 
-    fetchUsers('https://randomuser.me/api/?results=12&nat=us')
+    fetch('https://randomuser.me/api/?results=12&nat=us')
+        .then((res) => res.json())
         .then((users) => createGallery(users.results))
         .then(() => addListeners());
 
