@@ -165,7 +165,7 @@ const getDetails = (employee) => {
 
     const details = {
 
-        image: employee.picture.medium,
+        image: employee.picture.large,
         name: employee.name.first + ' ' + employee.name.last,
         email: employee.email,
         city: employee.location.city,
